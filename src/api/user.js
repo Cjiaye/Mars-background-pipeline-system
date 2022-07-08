@@ -1,8 +1,11 @@
 import request from '@/utils/request'
 // 登录接口
-export const login = (data) => {
+const login = (data) => {
   return request({
-    url: '/users/login',
+    url: `/users/login?username=${data.username}&password=${data.password}&token=${data.token}`,
     method: 'POST'
   })
+}
+export default{
+  login
 }

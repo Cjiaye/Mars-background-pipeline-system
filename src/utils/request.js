@@ -1,5 +1,5 @@
+import store from '../store'
 import axios from 'axios'
-// import store from '../store'
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
   timeout: 5000
@@ -7,9 +7,8 @@ const service = axios.create({
 
 service.interceptors.request.use(
   (config) => {
-    //将token通过请求头发送给后台
-    // const token = store.getters.token
-    // if (token) config.headers.Authorization = token
+    const token = store.getters.token
+    if (token) config.headers.Authorization = 'Bearer'+token
     return config
   },
   (error) => {
@@ -17,8 +16,15 @@ service.interceptors.request.use(
   }
 )
 
-service.interceptors.response(
+service.interceptors.response.use(
   (response) => {
+   const authorization=response.headers.authorization
+   if(response.headers.authorization){
+     store.commit('SET_TOKEN',authorization)
+   }
+    if(response.data.code===200){
+      return response.data.data
+    }
     return response
   },
   (error) => {
@@ -27,7 +33,7 @@ service.interceptors.response(
 )
 
 const request = (options) => {
-  if (options.method.toLowerCse() === 'get') {
+  if (options.method.toLowerCase() === 'get') {
     options.params = options.data || {}
   }
   return service(options)
