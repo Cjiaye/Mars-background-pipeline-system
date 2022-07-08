@@ -18,9 +18,10 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
   (response) => {
-   const authorization=response.headers.authorization
-   if(response.headers.authorization){
-     store.commit('SET_TOKEN',authorization)
+    // console.log(response.data.data.token)
+   const authorization=response.data.data.token
+   if(authorization){
+     store.commit('user/SET_TOKEN',authorization)
    }
     if(response.data.code===200){
       return response.data.data

@@ -4,10 +4,10 @@
   <el-form
     :model="loginForm" ref="LoginForm" :rules="loginRules">
     <el-form-item label="用户名">
-      <el-input v-model="loginForm.username" />
+      <el-input v-model="loginForm.userName" />
     </el-form-item>
     <el-form-item label="密码">
-      <el-input v-model="loginForm.password" />
+      <el-input v-model="loginForm.userPwd" />
     </el-form-item>
     <el-form-item>
       <el-button type='primary' style="width:100%" @click="handleSubmit">登录</el-button>
@@ -23,8 +23,8 @@ const store = useStore()
 const router=useRouter()
 const LoginForm = ref()
 const loginForm = reactive({
-  username: 'admin',
-  password: '123456',
+  userName: 'admin',
+  userPwd: '123456',
   token:''
 })
 const loginRules = {
@@ -37,6 +37,7 @@ const handleSubmit = () => {
     if (!valid) return 
     await store.dispatch('user/login',loginForm)
     router.push('/')
+  
     
   })
 }
